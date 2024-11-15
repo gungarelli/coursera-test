@@ -1,31 +1,63 @@
-<!DOCTYPE html>
-<html lang="en" ng-app='LunchCheck'>
+<!doctype html>
+<html lang="en" ng-app="ShoppingListCheckOff">
   <head>
+    <title>Shopping List Check Off</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="angular.min.js"></script>
     <script src="app.js"></script>
-    <title>Lunch Checker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <style>
-      .message { font-size: 1.3em; font-weight: bold; }
+      .emptyMessage {
+        font-weight: bold;
+        color: red;
+        font-size: 1.2em;
+      }
+      li {
+        margin-bottom: 7px;
+        font-size: 1.2em;
+      }
+      li > button {
+        margin-left: 6px;
+      }
+      button > span {
+        color: green;
+      }
     </style>
   </head>
 <body>
-   <div ng-controller='LunchCheckController'>
-     <h1>Lunch Checker</h1>
-         <div class="form-group">
-             <input id="lunch-menu" type="text" ng-model="lunchItems"
-             placeholder="list comma separated dishes you usually have for lunch"
-             class="form-control">
-         </div>
-         <div class="form-group">
-           <button ng-click="checkLunch()">Check If Too Much</button>
-         </div>
+  <h1>Shopping List Check Off</h1>
 
-        <div class="form-group message" > {{message}}
-        </div>
 
-   </div>
+    <!-- To Buy List -->
+    <div id="toBuyList" ng-controller='ToBuyController as toBuyList'>
+     <h2>To Buy:</h2>
+     <input type="text" ng-model="toBuyList.itemName" placeholder="item name">
+     <input type="text" ng-model="toBuyList.itemQuantity" placeholder="quantity">
+     <button ng-click="toBuyList.addItem();">Add Item</button>
+
+     <ol>
+       <li ng-repeat="item in toBuyList.items">
+         {{ item.quantity }} of {{ item.name }}
+         <button ng-click="toBuyList.markAsBought($index)">Bought</button>
+         <button ng-click="toBuyList.removeItem($index);">Remove Item</button>
+       </li>
+     </ol>
+     <div ng-if="toBuyList.items.length === 0">Everything is bought!</div>
+    </div>
+
+    <!-- Already Bought List -->
+    <div id="boughtList" ng-controller='AlreadyBoughtController as boughtList'>
+     <h2>Already Bought:</h2>
+     <ol>
+       <li ng-repeat="item in boughtList.items">
+         {{ item.quantity }} of {{ item.name }}
+         <button ng-click="boughtList.removeItem($index);">Remove Item</button>
+       </li>
+     </ol>
+     <div ng-if="boughtList.items.length === 0">Nothing bought yet.</div>
+    </div>
+
 
 </body>
 </html>
